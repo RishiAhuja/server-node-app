@@ -31,50 +31,51 @@ class ConnectionForm extends StatelessWidget {
                 Text(
                   'SSH Connection',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+                        fontWeight: FontWeight.w600,
+                      ),
                 ),
                 const Spacer(),
                 Obx(() => Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: controller.connectionStatusColor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(
-                      color: controller.connectionStatusColor,
-                      width: 1,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 6,
-                        height: 6,
-                        decoration: BoxDecoration(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: controller.connectionStatusColor
+                            .withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
                           color: controller.connectionStatusColor,
-                          shape: BoxShape.circle,
+                          width: 1,
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        controller.connectionStatusText,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: controller.connectionStatusColor,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 10,
-                        ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: controller.connectionStatusColor,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            controller.connectionStatusText,
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: controller.connectionStatusColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 10,
+                                    ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )),
+                    )),
               ],
             ),
             const SizedBox(height: AppConstants.smallPadding),
-            
             Row(
               children: [
                 Expanded(
@@ -123,7 +124,6 @@ class ConnectionForm extends StatelessWidget {
               ],
             ),
             const SizedBox(height: AppConstants.smallPadding),
-            
             Row(
               children: [
                 Expanded(
@@ -161,42 +161,45 @@ class ConnectionForm extends StatelessWidget {
               ],
             ),
             const SizedBox(height: AppConstants.smallPadding),
-            
             Row(
               children: [
                 Obx(() => CustomButton(
-                  text: controller.connectionStatus.value == SSHConnectionStatus.connected 
-                      ? 'Disconnect' 
-                      : 'Connect',
-                  icon: controller.connectionStatus.value == SSHConnectionStatus.connected
-                      ? Icons.link_off
-                      : Icons.link,
-                  onPressed: () {
-                    if (controller.connectionStatus.value == SSHConnectionStatus.connected) {
-                      controller.disconnect();
-                    } else {
-                      controller.connect();
-                    }
-                  },
-                  isLoading: controller.isLoading.value,
-                  type: controller.connectionStatus.value == SSHConnectionStatus.connected
-                      ? ButtonType.outline
-                      : ButtonType.primary,
-                  fontSize: 12,
-                  height: 32,
-                )),
+                      text: controller.connectionStatus.value ==
+                              SSHConnectionStatus.connected
+                          ? 'Disconnect'
+                          : 'Connect',
+                      icon: controller.connectionStatus.value ==
+                              SSHConnectionStatus.connected
+                          ? Icons.link_off
+                          : Icons.link,
+                      onPressed: () {
+                        if (controller.connectionStatus.value ==
+                            SSHConnectionStatus.connected) {
+                          controller.disconnect();
+                        } else {
+                          controller.connect();
+                        }
+                      },
+                      isLoading: controller.isLoading.value,
+                      type: controller.connectionStatus.value ==
+                              SSHConnectionStatus.connected
+                          ? ButtonType.outline
+                          : ButtonType.primary,
+                      fontSize: 12,
+                      height: 32,
+                    )),
                 const SizedBox(width: AppConstants.smallPadding),
                 Obx(() => CustomButton(
-                  text: 'Save',
-                  icon: Icons.bookmark,
-                  onPressed: controller.currentHost.isNotEmpty && 
-                           controller.currentUsername.isNotEmpty
-                      ? controller.saveCurrentConnection
-                      : null,
-                  type: ButtonType.secondary,
-                  fontSize: 12,
-                  height: 32,
-                )),
+                      text: 'Save',
+                      icon: Icons.bookmark,
+                      onPressed: controller.currentHost.isNotEmpty &&
+                              controller.currentUsername.isNotEmpty
+                          ? controller.saveCurrentConnection
+                          : null,
+                      type: ButtonType.secondary,
+                      fontSize: 12,
+                      height: 32,
+                    )),
                 const Spacer(),
                 CustomButton(
                   text: 'Clear Terminal',

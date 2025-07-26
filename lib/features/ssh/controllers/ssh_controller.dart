@@ -16,10 +16,12 @@ class SSHController extends GetxController {
   final RxString currentUsername = ''.obs;
   final RxString currentPassword = ''.obs;
   final RxInt currentPort = AppConstants.defaultSshPort.obs;
-  final Rx<SSHConnectionStatus> connectionStatus = SSHConnectionStatus.disconnected.obs;
+  final Rx<SSHConnectionStatus> connectionStatus =
+      SSHConnectionStatus.disconnected.obs;
   final RxList<String> terminalOutput = <String>[].obs;
   final RxList<CommandResult> commandHistory = <CommandResult>[].obs;
-  final RxList<Map<String, dynamic>> savedConnections = <Map<String, dynamic>>[].obs;
+  final RxList<Map<String, dynamic>> savedConnections =
+      <Map<String, dynamic>>[].obs;
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
 
@@ -70,8 +72,10 @@ class SSHController extends GetxController {
 
     // Bind text controllers to observables
     hostController.addListener(() => currentHost.value = hostController.text);
-    usernameController.addListener(() => currentUsername.value = usernameController.text);
-    passwordController.addListener(() => currentPassword.value = passwordController.text);
+    usernameController
+        .addListener(() => currentUsername.value = usernameController.text);
+    passwordController
+        .addListener(() => currentPassword.value = passwordController.text);
     portController.addListener(() {
       int? port = int.tryParse(portController.text);
       if (port != null && port > 0 && port <= 65535) {
@@ -82,7 +86,7 @@ class SSHController extends GetxController {
 
   void _loadSavedData() {
     if (_storageService == null) return;
-    
+
     // Load last connection details
     final lastIp = _storageService!.getLastIp();
     final lastUsername = _storageService!.getLastUsername();
@@ -105,7 +109,7 @@ class SSHController extends GetxController {
 
   void _loadSavedConnections() {
     if (_storageService == null) return;
-    
+
     final connections = _storageService!.getSavedConnectionsAsMap();
     savedConnections.assignAll(connections);
   }
@@ -125,8 +129,9 @@ class SSHController extends GetxController {
     errorMessage.value = '';
 
     try {
-      _logService.info('Attempting to connect to ${currentUsername.value}@${currentHost.value}:${currentPort.value}');
-      
+      _logService.info(
+          'Attempting to connect to ${currentUsername.value}@${currentHost.value}:${currentPort.value}');
+
       final connectionInfo = SSHConnectionInfo(
         host: currentHost.value,
         port: currentPort.value,
@@ -139,7 +144,8 @@ class SSHController extends GetxController {
       if (success) {
         _addToTerminal(AppConstants.terminalWelcomeMessage);
         _saveConnectionDetails();
-        _logService.info('Successfully connected to ${currentUsername.value}@${currentHost.value}');
+        _logService.info(
+            'Successfully connected to ${currentUsername.value}@${currentHost.value}');
         Get.snackbar(
           'Connected',
           'Successfully connected to ${currentUsername.value}@${currentHost.value}',
@@ -147,8 +153,10 @@ class SSHController extends GetxController {
           colorText: Colors.white,
         );
       } else {
-        _logService.error('Failed to connect to ${currentUsername.value}@${currentHost.value}');
-        _showError('Failed to connect. Please check your credentials and try again.');
+        _logService.error(
+            'Failed to connect to ${currentUsername.value}@${currentHost.value}');
+        _showError(
+            'Failed to connect. Please check your credentials and try again.');
       }
     } catch (e) {
       _logService.error('Connection error', e);
@@ -198,15 +206,21 @@ class SSHController extends GetxController {
   void loadConnection(Map<String, dynamic> connection) {
     hostController.text = connection['ip'] ?? connection['host'] ?? '';
     usernameController.text = connection['username'] ?? '';
-    portController.text = (connection['port'] ?? AppConstants.defaultSshPort).toString();
-    
+    portController.text =
+        (connection['port'] ?? AppConstants.defaultSshPort).toString();
+
     currentHost.value = hostController.text;
     currentUsername.value = usernameController.text;
-    currentPort.value = int.tryParse(portController.text) ?? AppConstants.defaultSshPort;
+    currentPort.value =
+        int.tryParse(portController.text) ?? AppConstants.defaultSshPort;
   }
 
   Future<void> saveCurrentConnection() async {
-    if (currentHost.isEmpty || currentUsername.isEmpty || _storageService == null) return;
+    if (currentHost.isEmpty ||
+        currentUsername.isEmpty ||
+        _storageService == null) {
+      return;
+    }
 
     final connection = {
       'ip': currentHost.value,
@@ -222,7 +236,7 @@ class SSHController extends GetxController {
 
   Future<void> removeConnection(Map<String, dynamic> connection) async {
     if (_storageService == null) return;
-    
+
     await _storageService!.removeConnection(
       connection['ip'] ?? connection['host'] ?? '',
       connection['username'] ?? '',
@@ -232,7 +246,7 @@ class SSHController extends GetxController {
 
   void _saveConnectionDetails() {
     if (_storageService == null) return;
-    
+
     _storageService!.saveLastIp(currentHost.value);
     _storageService!.saveLastUsername(currentUsername.value);
     saveCurrentConnection();
@@ -242,7 +256,8 @@ class SSHController extends GetxController {
     terminalOutput.add(text);
     // Keep only last 1000 lines
     if (terminalOutput.length > AppConstants.maxTerminalHistory) {
-      terminalOutput.removeRange(0, terminalOutput.length - AppConstants.maxTerminalHistory);
+      terminalOutput.removeRange(
+          0, terminalOutput.length - AppConstants.maxTerminalHistory);
     }
     _scrollToBottom();
   }
@@ -280,11 +295,11 @@ class SSHController extends GetxController {
 
   bool validateHost(String host) {
     if (host.isEmpty) return false;
-    
+
     // Check if it's an IP address
     RegExp ipRegex = RegExp(AppConstants.ipAddressPattern);
     if (ipRegex.hasMatch(host)) return true;
-    
+
     // Check if it's a hostname
     RegExp hostnameRegex = RegExp(AppConstants.hostNamePattern);
     return hostnameRegex.hasMatch(host);

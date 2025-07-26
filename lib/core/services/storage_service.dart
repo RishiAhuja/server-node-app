@@ -33,7 +33,8 @@ class StorageService {
   // Save last username
   Future<bool> saveLastUsername(String username) async {
     try {
-      return await _preferences!.setString(AppConstants.lastUsernameKey, username);
+      return await _preferences!
+          .setString(AppConstants.lastUsernameKey, username);
     } catch (e) {
       return false;
     }
@@ -53,23 +54,24 @@ class StorageService {
     try {
       List<String> connections = getSavedConnections();
       String connectionJson = jsonEncode(connection);
-      
+
       // Remove if already exists (to avoid duplicates)
       connections.removeWhere((conn) {
         Map<String, dynamic> connMap = jsonDecode(conn);
-        return connMap['ip'] == connection['ip'] && 
-               connMap['username'] == connection['username'];
+        return connMap['ip'] == connection['ip'] &&
+            connMap['username'] == connection['username'];
       });
-      
+
       // Add to beginning of list
       connections.insert(0, connectionJson);
-      
+
       // Keep only last 10 connections
       if (connections.length > 10) {
         connections = connections.take(10).toList();
       }
-      
-      return await _preferences!.setStringList(AppConstants.savedConnectionsKey, connections);
+
+      return await _preferences!
+          .setStringList(AppConstants.savedConnectionsKey, connections);
     } catch (e) {
       return false;
     }
@@ -78,7 +80,8 @@ class StorageService {
   // Get saved connections
   List<String> getSavedConnections() {
     try {
-      return _preferences!.getStringList(AppConstants.savedConnectionsKey) ?? [];
+      return _preferences!.getStringList(AppConstants.savedConnectionsKey) ??
+          [];
     } catch (e) {
       return [];
     }
@@ -88,7 +91,9 @@ class StorageService {
   List<Map<String, dynamic>> getSavedConnectionsAsMap() {
     try {
       List<String> connections = getSavedConnections();
-      return connections.map((conn) => jsonDecode(conn) as Map<String, dynamic>).toList();
+      return connections
+          .map((conn) => jsonDecode(conn) as Map<String, dynamic>)
+          .toList();
     } catch (e) {
       return [];
     }
@@ -102,7 +107,8 @@ class StorageService {
         Map<String, dynamic> connMap = jsonDecode(conn);
         return connMap['ip'] == ip && connMap['username'] == username;
       });
-      return await _preferences!.setStringList(AppConstants.savedConnectionsKey, connections);
+      return await _preferences!
+          .setStringList(AppConstants.savedConnectionsKey, connections);
     } catch (e) {
       return false;
     }

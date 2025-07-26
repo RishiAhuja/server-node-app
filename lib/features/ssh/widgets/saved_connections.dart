@@ -29,8 +29,8 @@ class SavedConnections extends StatelessWidget {
                 Text(
                   'Saved Connections',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+                        fontWeight: FontWeight.w600,
+                      ),
                 ),
                 const Spacer(),
                 CustomButton(
@@ -43,7 +43,6 @@ class SavedConnections extends StatelessWidget {
               ],
             ),
             const SizedBox(height: AppConstants.smallPadding),
-            
             Obx(() {
               if (controller.savedConnections.isEmpty) {
                 return Container(
@@ -51,7 +50,8 @@ class SavedConnections extends StatelessWidget {
                   padding: const EdgeInsets.all(AppConstants.largePadding),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
-                    borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+                    borderRadius:
+                        BorderRadius.circular(AppConstants.borderRadius),
                     border: Border.all(
                       color: Theme.of(context).dividerColor,
                     ),
@@ -67,8 +67,9 @@ class SavedConnections extends StatelessWidget {
                       Text(
                         'No saved connections',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).textTheme.bodySmall?.color,
-                        ),
+                              color:
+                                  Theme.of(context).textTheme.bodySmall?.color,
+                            ),
                       ),
                       const SizedBox(height: AppConstants.smallPadding),
                       Text(
@@ -84,7 +85,7 @@ class SavedConnections extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: controller.savedConnections.length,
-                separatorBuilder: (context, index) => 
+                separatorBuilder: (context, index) =>
                     const SizedBox(height: AppConstants.smallPadding),
                 itemBuilder: (context, index) {
                   final connection = controller.savedConnections[index];
@@ -136,8 +137,8 @@ class SavedConnections extends StatelessWidget {
               child: Text(
                 '$username@$host',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+                      fontWeight: FontWeight.w500,
+                    ),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -150,14 +151,15 @@ class SavedConnections extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(AppConstants.borderRadius / 3),
+                  borderRadius:
+                      BorderRadius.circular(AppConstants.borderRadius / 3),
                 ),
                 child: Text(
                   ':$port',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.w500,
-                  ),
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.w500,
+                      ),
                 ),
               ),
             ],
@@ -191,7 +193,8 @@ class SavedConnections extends StatelessWidget {
                 color: Theme.of(context).colorScheme.error,
                 size: 20,
               ),
-              onPressed: () => _showDeleteDialog(context, controller, connection),
+              onPressed: () =>
+                  _showDeleteDialog(context, controller, connection),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(
                 minWidth: 32,
@@ -208,7 +211,7 @@ class SavedConnections extends StatelessWidget {
     try {
       final DateTime date = DateTime.parse(dateString);
       final Duration difference = DateTime.now().difference(date);
-      
+
       if (difference.inDays > 0) {
         return '${difference.inDays} day${difference.inDays == 1 ? '' : 's'} ago';
       } else if (difference.inHours > 0) {

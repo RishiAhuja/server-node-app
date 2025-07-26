@@ -13,7 +13,7 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.backgroundColor,
       cardColor: AppColors.cardColor,
       dividerColor: AppColors.dividerColor,
-      
+
       // Color Scheme
       colorScheme: const ColorScheme.light(
         primary: AppColors.primaryColor,
@@ -27,7 +27,7 @@ class AppTheme {
         onSurface: AppColors.textPrimary,
         onError: Colors.white,
       ),
-      
+
       // Text Theme
       textTheme: GoogleFonts.interTextTheme().copyWith(
         displayLarge: GoogleFonts.inter(
@@ -106,7 +106,7 @@ class AppTheme {
           color: AppColors.textSecondary,
         ),
       ),
-      
+
       // App Bar Theme
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.primaryColor,
@@ -120,7 +120,7 @@ class AppTheme {
           color: Colors.white,
         ),
       ),
-      
+
       // Card Theme
       cardTheme: CardTheme(
         color: AppColors.cardColor,
@@ -130,7 +130,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(AppConstants.borderRadius),
         ),
       ),
-      
+
       // Input Decoration Theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -164,7 +164,7 @@ class AppTheme {
           fontWeight: FontWeight.w400,
         ),
       ),
-      
+
       // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -183,7 +183,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Text Button Theme
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
@@ -210,7 +210,7 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.backgroundColorDark,
       cardColor: AppColors.cardColorDark,
       dividerColor: AppColors.dividerColorDark,
-      
+
       // Color Scheme
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primaryColor,
@@ -224,9 +224,10 @@ class AppTheme {
         onSurface: AppColors.textPrimaryDark,
         onError: Colors.white,
       ),
-      
+
       // Text Theme
-      textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme).copyWith(
+      textTheme:
+          GoogleFonts.interTextTheme(ThemeData.dark().textTheme).copyWith(
         displayLarge: GoogleFonts.inter(
           fontSize: 24,
           fontWeight: FontWeight.w700,
@@ -303,7 +304,7 @@ class AppTheme {
           color: AppColors.textSecondaryDark,
         ),
       ),
-      
+
       // App Bar Theme
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.surfaceColorDark,
@@ -317,7 +318,7 @@ class AppTheme {
           color: AppColors.textPrimaryDark,
         ),
       ),
-      
+
       // Card Theme
       cardTheme: CardTheme(
         color: AppColors.cardColorDark,
@@ -327,7 +328,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(AppConstants.borderRadius),
         ),
       ),
-      
+
       // Input Decoration Theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -361,7 +362,7 @@ class AppTheme {
           fontWeight: FontWeight.w400,
         ),
       ),
-      
+
       // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -380,7 +381,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Text Button Theme
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(

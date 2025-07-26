@@ -5,6 +5,7 @@ import '../controllers/ssh_controller.dart';
 import '../widgets/connection_form.dart';
 import '../widgets/terminal_widget.dart';
 import '../widgets/saved_connections.dart';
+import '../../work_manager/views/work_manager_screen.dart';
 
 class SSHScreen extends StatelessWidget {
   const SSHScreen({super.key});
@@ -71,7 +72,7 @@ class SSHScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(width: AppConstants.smallPadding),
-          
+
           // Right panel - Terminal
           Expanded(
             flex: 2,
@@ -90,7 +91,7 @@ class SSHScreen extends StatelessWidget {
           // Top - Connection form
           const ConnectionForm(),
           const SizedBox(height: AppConstants.smallPadding),
-          
+
           // Bottom - Terminal and saved connections
           Expanded(
             child: Row(
@@ -115,7 +116,7 @@ class SSHScreen extends StatelessWidget {
 
   Widget _buildMobileLayout() {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Column(
         children: [
           Container(
@@ -124,6 +125,7 @@ class SSHScreen extends StatelessWidget {
               indicatorColor: Colors.white,
               labelColor: Colors.white,
               unselectedLabelColor: Colors.white70,
+              isScrollable: true,
               tabs: [
                 Tab(
                   icon: Icon(Icons.settings_ethernet),
@@ -137,6 +139,10 @@ class SSHScreen extends StatelessWidget {
                   icon: Icon(Icons.bookmark),
                   text: 'Saved',
                 ),
+                Tab(
+                  icon: Icon(Icons.work_history),
+                  text: 'Tasks',
+                ),
               ],
             ),
           ),
@@ -148,18 +154,21 @@ class SSHScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(AppConstants.smallPadding),
                   child: const ConnectionForm(),
                 ),
-                
+
                 // Terminal tab
                 Padding(
                   padding: const EdgeInsets.all(AppConstants.smallPadding),
                   child: const TerminalWidget(),
                 ),
-                
+
                 // Saved connections tab
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(AppConstants.smallPadding),
                   child: const SavedConnections(),
                 ),
+
+                // Work Manager tab
+                const WorkManagerScreen(),
               ],
             ),
           ),

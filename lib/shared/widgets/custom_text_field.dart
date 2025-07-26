@@ -57,8 +57,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         Text(
           widget.label,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w500,
-          ),
+                fontWeight: FontWeight.w500,
+              ),
         ),
         const SizedBox(height: AppConstants.smallPadding),
         TextFormField(
