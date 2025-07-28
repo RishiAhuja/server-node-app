@@ -28,7 +28,7 @@ class BackgroundWorker(context: Context, params: WorkerParameters) : CoroutineWo
         
         return withContext(Dispatchers.IO) {
             try {
-                Log.d(TAG, "Starting background work: $taskName")
+                Log.d(TAG, "Starting background work: $taskName ($taskType)")
                 
                 // Create notification channel if needed
                 createNotificationChannel()
@@ -41,6 +41,8 @@ class BackgroundWorker(context: Context, params: WorkerParameters) : CoroutineWo
                     "file_sync" -> performFileSync()
                     else -> performDefaultTask()
                 }
+                
+                Log.d(TAG, "Task $taskName completed with result: ${taskResult.success} - ${taskResult.message}")
                 
                 // Update counters
                 val previousSuccess = inputData.getInt("successCount", 0)
@@ -168,11 +170,12 @@ class BackgroundWorker(context: Context, params: WorkerParameters) : CoroutineWo
             val channel = NotificationChannel(
                 NOTIFICATION_CHANNEL_ID,
                 NOTIFICATION_CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 description = "Notifications for SSH Client background tasks"
-                enableLights(false)
-                enableVibration(false)
+                enableLights(true)
+                enableVibration(true)
+                setSound(null, null) // Disable sound to avoid being too intrusive
             }
 
             val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -183,6 +186,12 @@ class BackgroundWorker(context: Context, params: WorkerParameters) : CoroutineWo
     private fun sendNotification(taskName: String, success: Boolean, message: String) {
         val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         
+        // Check if notifications are enabled
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !notificationManager.areNotificationsEnabled()) {
+            Log.w(TAG, "Notifications are disabled for this app")
+            return
+        }
+        
         val timestamp = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
         val title = if (success) "✅ $taskName" else "❌ $taskName"
         val content = "$message at $timestamp"
@@ -191,13 +200,21 @@ class BackgroundWorker(context: Context, params: WorkerParameters) : CoroutineWo
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(title)
             .setContentText(content)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .build()
 
-        // Use a unique notification ID based on task name
-        val notificationId = taskName.hashCode()
-        notificationManager.notify(notificationId, notification)
+        // Use a unique notification ID based on task name and timestamp
+        val notificationId = (taskName + timestamp).hashCode()
+        
+        try {
+            notificationManager.notify(notificationId, notification)
+            Log.d(TAG, "Notification sent: $title - $content (ID: $notificationId)")
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to send notification", e)
+        }
     }
 
     data class TaskResult(val success: Boolean, val message: String)

@@ -44,6 +44,9 @@ dependencies:
   # Storage
   shared_preferences: ^2.2.2
   
+  # Permissions
+  permission_handler: ^11.3.1
+  
   # UI
   google_fonts: ^6.2.1
   flutter_svg: ^2.0.10+1

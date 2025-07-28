@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../core/services/work_manager_service.dart';
 import '../../../core/services/log_service.dart';
 
@@ -20,9 +22,83 @@ class WorkManagerController extends GetxController {
   void onInit() {
     super.onInit();
     _logService.info('WorkManager Controller initialized');
+    _checkNotificationPermission();
     refreshWorkStatus();
     // Auto-refresh every 10 seconds
     _startAutoRefresh();
+  }
+
+  Future<void> _checkNotificationPermission() async {
+    try {
+      final status = await Permission.notification.status;
+      if (status.isDenied || status.isPermanentlyDenied) {
+        _logService.warning('Notification permission not granted: $status');
+        _showNotificationPermissionDialog();
+      } else {
+        _logService.info('Notification permission granted: $status');
+      }
+    } catch (e) {
+      _logService.error('Error checking notification permission', e);
+    }
+  }
+
+  void _showNotificationPermissionDialog() {
+    Get.dialog(
+      AlertDialog(
+        title: Text(
+          'Enable Notifications',
+          style: GoogleFonts.jetBrainsMono(fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          'To see background task notifications, please enable notifications for this app.',
+          style: GoogleFonts.jetBrainsMono(fontSize: 12),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('Maybe Later'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Get.back();
+              try {
+                final status = await Permission.notification.request();
+                if (status.isGranted) {
+                  Get.snackbar(
+                    'Success',
+                    'Notification permission granted!',
+                    backgroundColor: Colors.green.withValues(alpha: 0.8),
+                    colorText: Colors.white,
+                  );
+                } else if (status.isPermanentlyDenied) {
+                  Get.snackbar(
+                    'Permission Required',
+                    'Please enable notifications in app settings',
+                    backgroundColor: Colors.orange.withValues(alpha: 0.8),
+                    colorText: Colors.white,
+                    mainButton: TextButton(
+                      onPressed: () => openAppSettings(),
+                      child: const Text('Settings', style: TextStyle(color: Colors.white)),
+                    ),
+                  );
+                } else {
+                  Get.snackbar(
+                    'Permission Denied',
+                    'Notifications won\'t be shown for background tasks',
+                    backgroundColor: Colors.red.withValues(alpha: 0.8),
+                    colorText: Colors.white,
+                  );
+                }
+              } catch (e) {
+                _showError('Failed to request permission: $e');
+              }
+            },
+            child: const Text('Enable'),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
   }
 
   void _startAutoRefresh() {
@@ -122,6 +198,17 @@ class WorkManagerController extends GetxController {
       _showError('Failed to cancel all tasks: $e');
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<String?> sendTestNotification() async {
+    try {
+      final result = await _workManagerService.sendTestNotification();
+      _logService.info('Test notification sent - $result');
+      return result;
+    } catch (e) {
+      _logService.error('Error sending test notification', e);
+      throw e;
     }
   }
 

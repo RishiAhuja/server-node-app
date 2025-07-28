@@ -67,6 +67,11 @@ class WorkManagerScreen extends StatelessWidget {
                   icon: const Icon(Icons.clear_all),
                   color: AppColors.errorColor,
                 ),
+                IconButton(
+                  onPressed: () => _sendTestNotification(controller),
+                  icon: const Icon(Icons.notifications_active),
+                  color: AppColors.infoColor,
+                ),
               ],
             ),
           ),
@@ -201,5 +206,26 @@ class WorkManagerScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _sendTestNotification(WorkManagerController controller) async {
+    try {
+      final result = await controller.sendTestNotification();
+      Get.snackbar(
+        'Test Notification',
+        result ?? 'Test notification sent',
+        backgroundColor: AppColors.successColor.withValues(alpha: 0.8),
+        colorText: Colors.white,
+        duration: const Duration(seconds: 2),
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to send test notification: $e',
+        backgroundColor: AppColors.errorColor.withValues(alpha: 0.8),
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+      );
+    }
   }
 }

@@ -75,6 +75,36 @@ class WorkManagerService {
       throw WorkManagerException('Failed to cancel all work: ${e.message}');
     }
   }
+
+  /// Check if notification permission is granted
+  Future<bool> checkNotificationPermission() async {
+    try {
+      final result = await _channel.invokeMethod('checkNotificationPermission');
+      return result as bool;
+    } on PlatformException catch (e) {
+      throw WorkManagerException('Failed to check notification permission: ${e.message}');
+    }
+  }
+
+  /// Request notification permission
+  Future<String?> requestNotificationPermission() async {
+    try {
+      final result = await _channel.invokeMethod('requestNotificationPermission');
+      return result as String?;
+    } on PlatformException catch (e) {
+      throw WorkManagerException('Failed to request notification permission: ${e.message}');
+    }
+  }
+
+  /// Send a test notification
+  Future<String?> sendTestNotification() async {
+    try {
+      final result = await _channel.invokeMethod('sendTestNotification');
+      return result as String?;
+    } on PlatformException catch (e) {
+      throw WorkManagerException('Failed to send test notification: ${e.message}');
+    }
+  }
 }
 
 class WorkInfo {
